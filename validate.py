@@ -27,11 +27,12 @@ class Validate:
 		return True
 
 	def fix_raw_data(self, args):
-		a = {}
 		for i in range (0, len(self.raw_sells)):
 			name	=	str(self.raw_sells[i]['name'])
 			price	=	int(self.raw_sells[i]['price'])
 			amount	=	int(self.raw_sells[i]['amount'])
+
+			a = {}
 
 			if not self.check_diap(name, price, amount, args) or a in self.clear_sells:
 				continue
@@ -42,5 +43,3 @@ class Validate:
 				a['sell_date']	=	datetime.strptime(self.raw_sells[i]['sell_date'], '%Y-%m-%d %H:%M:%S')
 
 				self.clear_sells.append(a)
-
-		print(self.clear_sells)

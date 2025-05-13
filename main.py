@@ -1,6 +1,8 @@
 #from sells_gen import Sells_gen
 from validate import Validate
 import argparse
+from db_operations import db_operations
+from aggregate import aggregate
 #a = Sells_gen('name.csv')
 #a.gen_fake_shop_report()
 
@@ -24,7 +26,20 @@ def main():
 	a = Validate('name.csv')
 
 	a.load_data()
-	a.fix_types(args)
+	a.fix_raw_data(args)
+
+	b = aggregate()
+	b.set_clear_data(a.clear_sells)
+	b.calc_params()
+
+	c = db_operations()
+	c.set_db_name('test.db')
+	c.auto_migrate()
+
+	c.insert_raw_data(b.clear_data)
+	c.insert_aggregated_data(b.good_aggregated_data)
+
+	#print(a.clear_sells)
 
 
 if __name__ == '__main__':

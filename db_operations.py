@@ -103,18 +103,18 @@ class db_operations:
 		insert_script = self.get_insert_raw_data()
 
 		for i in raw_data:
-			pass
+			self.cursor.execute(insert_script,(i['name'], i['price'], i['amount'], i['sell_date']))
 		
 		self.conn.commit()
 		self.close_connect()
 
-	def insert_aggregated_data(self):
+	def insert_aggregated_data(self, aggregated_data):
 		self.prep_connect()
 
 		insert_script = self.get_insert_aggregated_data()
 
-		for i in raw_data:
-			pass
+		for i in aggregated_data.keys():
+			self.cursor.execute(insert_script,(aggregated_data[i]['total_money'], aggregated_data[i]['total_amount'], aggregated_data[i]['avg_order'], i))
 
 		self.conn.commit()
 		self.close_connect()

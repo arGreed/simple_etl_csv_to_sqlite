@@ -1,7 +1,7 @@
 class aggregate:
 	def __init__(self):
 		self.clear_data = []
-		self.good_aggregated_data = []
+		self.good_aggregated_data = {}
 
 	def set_clear_data(self, clear_data):
 		self.clear_data = clear_data
@@ -41,3 +41,5 @@ class aggregate:
 		self.calc_total_amount(self.clear_data, rez)
 		self.calc_total_money(self.clear_data, rez)
 		self.calc_avg(self.clear_data, rez)
+
+		self.good_aggregated_data = rez
