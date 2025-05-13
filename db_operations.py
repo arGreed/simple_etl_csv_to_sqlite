@@ -1,6 +1,6 @@
 import sqlite3
 
-class db_operations:
+class DB_operations:
 	def __init__(self):
 		self.db_name	=	None
 		self.conn		=	None

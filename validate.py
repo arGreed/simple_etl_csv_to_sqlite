@@ -2,31 +2,77 @@ import csv
 from datetime import datetime
 
 class Validate:
-	def __init__(self, file):
+	def __init__(self, file: str):
+		"""
+		Инициализирует экземпляр класса Validate.
+
+		Загружает данные из указанного файла.
+		Подготавливает списки для хранения "сырых" и "очищенных" данных.
+
+		Args:
+			file (str): Путь к указанному CSV-файлу
+		Attributes:
+			filename (str): наименование файла, содержащего необработанные данные
+			raw_sells (list): Список "сырых" записей из файла
+			clear_sells (list): Список отфильтрованных и корректных записей
+		"""
 		self.filename		=	file
 		self.raw_sells		=	[]
 		self.clear_sells	=	[]
 
 	def load_data(self):
-		with open(self.filename,'r', encoding='utf-8') as file:
+		"""
+		Загрузка данных из указанного CSV-файла в память программы
+
+		Метод открывает файл, указанный при инициализации объекта и считывает
+		содержимое посредством DictReader. Результат сохраняется в атрибут
+		raw_sells в виде списка словарей
+		"""
+		with open(self.filename,'r', encoding = 'utf-8') as file:
 			reader = csv.DictReader(file)
 
 			self.raw_sells = list(reader)
 
 	@staticmethod
-	def check_diap(name, price, amount, args):
+	def check_diap(name: str, price: int, amount: int, args) -> bool:
+		"""
+		Проверка корректности данных
+
+		Метод получает на вход параметры из необработанной строки, полученной из
+		CSV-файла и аргументы, введённые при запуске приложения. Далее происходит
+		проверка принадлежности значений к полученным диапазонам.
+		
+		Returns:
+			bool:
+				False - какой-либо из параметров не принадлежит к допустимым диапазонам
+				True - если все параметры соответствуют допустимым диапазонам
+		Args:
+			name (str): наименование продукта
+			price (int): цена продукта
+			amount (int): количество товаров
+			args: Объект с атрибутами:
+				- min_name (int): Минимальная длина названия
+				- max_name (int): Максимальная длина названия
+				- min_price (int): Минимальная цена
+				- max_price (int): Максимальная цена
+				- min_amount (int): Минимальное количество
+				- max_amount (int): Максимальное количество
+		"""
 		#? Слишком длинное наименование
-		if len(name) > args.max_name or len(name) < args.min_name:
+		if not(args.max_name >= len(name) >= args.min_name):
 			return False
 		#? Цена не принадлежит к допустимому диапазону
-		if price > args.max_price or price < args.min_price:
+		if not(args.max_price >= price >= args.min_price):
 			return False
 		#? Количество не соответствует допустимому диапазону
-		if amount > args.max_amount or amount < args.min_amount:
+		if not(args.max_amount >= amount >= args.min_amount):
 			return False
 		return True
 
 	def fix_raw_data(self, args):
+		"""
+		
+		"""
 		for i in range (0, len(self.raw_sells)):
 			name	=	str(self.raw_sells[i]['name'])
 			price	=	int(self.raw_sells[i]['price'])
@@ -34,12 +80,12 @@ class Validate:
 
 			a = {}
 
-			if not self.check_diap(name, price, amount, args) or a in self.clear_sells:
+			if not self.check_diap(name, price, amount, args):
 				continue
 			else:
 				a['name']		=	name
 				a['price']		=	price
 				a['amount']		=	amount
 				a['sell_date']	=	datetime.strptime(self.raw_sells[i]['sell_date'], '%Y-%m-%d %H:%M:%S')
-
-				self.clear_sells.append(a)
+				if a not in self.clear_sells:
+					self.clear_sells.append(a)

@@ -1,4 +1,4 @@
-class aggregate:
+class Aggregate:
 	def __init__(self):
 		self.clear_data = []
 		self.good_aggregated_data = {}
