@@ -1,10 +1,13 @@
 import sqlite3
+import logging
 
 class DB_operations:
 	def __init__(self):
 		self.db_name	=	None
 		self.conn		=	None
 		self.cursor		=	None
+		self.logger = logging.getLogger(__name__)
+
 
 	def set_db_name(self, db_name):
 		self.db_name = db_name

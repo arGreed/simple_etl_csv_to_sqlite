@@ -1,7 +1,11 @@
+import logging
+
 class Aggregate:
 	def __init__(self):
 		self.clear_data = []
 		self.good_aggregated_data = {}
+		self.logger = logging.getLogger(__name__)
+		
 
 	def set_clear_data(self, clear_data):
 		self.clear_data = clear_data

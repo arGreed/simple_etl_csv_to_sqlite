@@ -1,4 +1,6 @@
 import csv
+import logging
+
 from datetime import datetime
 
 class Validate:
@@ -16,6 +18,7 @@ class Validate:
 			raw_sells (list): Список "сырых" записей из файла
 			clear_sells (list): Список отфильтрованных и корректных записей
 		"""
+		self.logger = logging.getLogger(__name__)
 		self.filename		=	file
 		self.raw_sells		=	[]
 		self.clear_sells	=	[]
@@ -71,7 +74,18 @@ class Validate:
 
 	def fix_raw_data(self, args):
 		"""
-		
+		Валидация данных
+
+		Метод, проверяющий типы полученных данных, их принадлежность
+		к допустимым диапазонам и формирующий перечень очищенных значений
+
+		args: Объект с атрибутами:
+				- min_name (int): Минимальная длина названия
+				- max_name (int): Максимальная длина названия
+				- min_price (int): Минимальная цена
+				- max_price (int): Максимальная цена
+				- min_amount (int): Минимальное количество
+				- max_amount (int): Максимальное количество
 		"""
 		for i in range (0, len(self.raw_sells)):
 			name	=	str(self.raw_sells[i]['name'])
